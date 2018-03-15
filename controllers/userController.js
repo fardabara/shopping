@@ -1,3 +1,5 @@
+let lib = require('../lib/lib');
+let User = require('../models/User');
 let _route = 'user/';
 
 exports.signin = function (req, res) {
@@ -14,12 +16,32 @@ exports.signinPost = function (req, res) {
 };
 
 exports.signup = function (req, res) {
-  res.render(_route + 'signup');
+  console.log(req.flash());
+  let messages = req.flash();
+  res.render(_route + 'signup', {
+    csrfToken: req.csrfToken(),
+    messages: messages,
+    hasError: lib._.isEmpty(messages)
+  });
 };
 
 exports.signupPost = function (req, res) {
-  console.log(req.body);
-  res.send(req.body);
+  let body = JSON.parse(JSON.stringify(req.body));
+  User.findOne({ email: body.email }).then(user => {
+    if(user) {
+      req.flash('emailAlreadyTaken', 'Email Already Taken!');
+      return res.redirect('/user/signup');
+    }
+    if(!body.password) {
+      req.flash('passwordIsRequired', 'Password is Required!');
+      return res.redirect('/user/signup');
+    }
+    if(body.password && body.password !== body.confirm_password) {
+      req.flash('passwordNotMatch', 'Password Not Match!');
+      return res.redirect('/user/signup');
+    }
+
+  });
 };
 
 exports.profile = function (req, res) {

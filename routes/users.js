@@ -15,8 +15,8 @@ router.post('/signin', passport.authenticate('local', {
   failureRedirect: '/user/signin',
   failureFlash: true
 }), userModule.signinPost);
-router.post('/signup', userModule.signupPost);
 router.get('/signup', userModule.signup);
+router.post('/signup', userModule.signupPost);
 router.get('/profile', helpers.isAuthenticated, userModule.profile);
 router.get('/logout', helpers.isAuthenticated, userModule.logout);
 

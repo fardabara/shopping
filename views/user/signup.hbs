@@ -2,10 +2,20 @@
     <div class="col-md-6 col-md-offset-3">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <h1>Sign up</h1>
+                <h1 class="text-center">Sign up</h1>
             </div>
             <div class="panel-body">
-                <form action="" method="post">
+                {{#if hasError}}
+                    {{#each messages}}
+                        <div class="row">
+                            <div class="col-md-10 col-md-offset-1">
+                                <p class="text-center alert alert-danger">{{this}}</p>
+                            </div>
+                        </div>
+                    {{/each}}
+                {{/if}}
+                <form action="/user/signup" method="post">
+                    <input type="hidden" name="_csrf" value="{{csrfToken}}">
                     <div class="form-group">
                         <label for="email">Email:</label>
                         <input type="email" class="form-control" name="email">
