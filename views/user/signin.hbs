@@ -3,6 +3,17 @@
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <h1 class="text-center">Sign in</h1>
+                {{#if hasError}}
+                    {{#each messages}}
+                        <div class="row">
+                            <div class="col-md-8 col-md-offset-2">
+                                <div class="alert alert-danger">
+                                    <p class="text-center">{{this}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    {{/each}}
+                {{/if}}
             </div>
             <div class="panel-body">
                 <form action="/user/signin" method="post">

@@ -20,6 +20,8 @@ let app = express();
 mongoose.connect('mongodb://localhost/shopping');
 mongoose.Promise = global.Promise;
 
+require('./config/passport');
+
 // view engine setup
 // app.set('views', path.join(__dirname, 'views'));
 app.engine('.hbs', exphs({ defaultLayout: 'main', extname: '.hbs' }));
@@ -38,8 +40,15 @@ app.use(passport.session());
 // app.use(csrf({ cookie: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(function (req, res, next) {
+  res.locals.login = req.isAuthenticated();
+  next();
+});
+
 app.use('/', index);
 app.use('/user', users);
+
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
