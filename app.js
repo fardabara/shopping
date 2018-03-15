@@ -10,6 +10,7 @@ const mongoose = require('mongoose');
 const session = require('express-session');
 const passport = require('passport');
 const flash = require('connect-flash');
+const validator = require('express-validator');
 
 let index = require('./routes/index');
 let users = require('./routes/users');
@@ -32,6 +33,7 @@ app.set('view engine', 'hbs');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(validator());
 app.use(cookieParser());
 app.use(session({ secret: 'keyboard cat', resave: false, saveUninitialized: false }));
 app.use(flash());
