@@ -6,8 +6,8 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const exphs = require('express-handlebars');
 const mongoose = require('mongoose');
-// const csrf = require('csurf');
 const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 const passport = require('passport');
 const flash = require('connect-flash');
 const validator = require('express-validator');
@@ -35,7 +35,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(validator());
 app.use(cookieParser());
-app.use(session({ secret: 'keyboard cat', resave: false, saveUninitialized: false }));
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: false,
+  store: new MongoStore({ mongooseConnection: mongoose.connection }),
+  cookie: { maxAge: 180 * 60 * 1000 }
+}));
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
@@ -49,7 +55,6 @@ app.use(function (req, res, next) {
 
 app.use('/', index);
 app.use('/user', users);
-
 
 
 // catch 404 and forward to error handler
